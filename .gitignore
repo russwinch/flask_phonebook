@@ -1,3 +1,5 @@
 *.swp
 *.bak
-/instance
+instance/
+__pycache__/
+*.pyc
