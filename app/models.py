@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from app import app
@@ -6,76 +6,87 @@ from app import app
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
-class User(db.Model):
+class Contact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
+    name = db.Column(db.String(80), unique=True)
     phone = db.Column(db.String(15), unique=True)
 
-    def __init__(self, username, phone):
-        self.username = username
+    def __init__(self, name, phone):
+        self.name = name
         self.phone = phone
 
-class UserSchema(ma.Schema):
+class ContactSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ('id', 'username', 'phone')
+        fields = ('id', 'name', 'phone')
 
 
-user_schema = UserSchema()
-users_schema = UserSchema(many=True)
+contact_schema = ContactSchema()
+contacts_schema = ContactSchema(many=True)
 
 
-# endpoint to create new user
-@app.route("/user", methods=["POST"])
-def add_user():
-    username = request.json['username']
-    phone = request.json['phone']
-    new_user = User(username, phone)
+# endpoint to create new contact
+@app.route("/contact", methods=["POST"])
+def add_contact():
+    try:
+        name = request.json['name']
+        phone = request.json['phone']
+        new_contact = Contact(name, phone)
+        db.session.add(new_contact)
+        db.session.commit()
 
-    db.session.add(new_user)
-    db.session.commit()
+        contact = Contact.query.get(new_contact.id)
+        return contact_schema.jsonify(contact)
+    except:
+        abort(400)
 
-    user = User.query.get(new_user.id)
-    return user_schema.jsonify(user)
-
-
-# endpoint to show all users
-@app.route("/user", methods=["GET"])
-def get_user():
-    all_users = User.query.all()
-    result = users_schema.dump(all_users)
+# endpoint to show all contacts
+@app.route("/contact", methods=["GET"])
+def get_contact():
+    all_contacts = Contact.query.all()
+    result = contacts_schema.dump(all_contacts)
     return jsonify(result.data)
 
 
-# endpoint to get user detail by id
-@app.route("/user/<id>", methods=["GET"])
-def user_detail(id):
-    user = User.query.get(id)
-    return user_schema.jsonify(user)
+# endpoint to get contact detail by id
+@app.route("/contact/<id>", methods=["GET"])
+def contact_detail(id):
+    contact = Contact.query.get(id)
+    print(contact)
+    if not contact:
+        abort(404)
+    return contact_schema.jsonify(contact)
 
 
-# endpoint to update user
-@app.route("/user/<id>", methods=["PUT"])
-def user_update(id):
-    user = User.query.get(id)
-    username = request.json['username']
-    phone = request.json['phone']
+# endpoint to update contact
+@app.route("/contact/<id>", methods=["PUT"])
+def contact_update(id):
+    try:
+        contact = Contact.query.get(id)
+        name = request.json['name']
+        phone = request.json['phone']
 
-    user.phone = phone
-    user.username = username
+        contact.name = name
+        contact.phone = phone
 
-    db.session.commit()
-    return user_schema.jsonify(user)
+        db.session.commit()
+        return contact_schema.jsonify(contact)
 
+    except:
+        abort(400)
 
-# endpoint to delete user
-@app.route("/user/<id>", methods=["DELETE"])
-def user_delete(id):
-    user = User.query.get(id)
-    db.session.delete(user)
-    db.session.commit()
+# endpoint to delete contact
+@app.route("/contact/<id>", methods=["DELETE"])
+def contact_delete(id):
+    try:
+        contact = Contact.query.get(id)
+        db.session.delete(contact)
+        db.session.commit()
 
-    return user_schema.jsonify(user)
+        return contact_schema.jsonify(contact)
+
+    except:
+        abort(404)
 
 
 if __name__ == '__main__':
