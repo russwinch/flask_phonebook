@@ -15,22 +15,22 @@ GET
 *curl -X GET http://127.0.0.1:5000/contact*
 
 ### show specific contact
-**/contact/<id>**  
-GET with  <id> of the target contact  
+**/contact/++id++**  
+GET with  ++id++ of the target contact  
 
 *curl -X GET http://127.0.0.1:5000/contact/1*
 
 ### amend contact
-**/contact/<id>**  
+**/contact/++id++**  
 {"name":"++contact-name++", "phone":"++contact-phone++"}  
 PUT and replace ++contact-name++ and ++contact-phone++ with the new data
-and <id> of the target contact
+and ++id++ of the target contact
 
 *curl -d '{"name":"test friend 2","phone":"01234555555"}' -H "Content-Type: application/json" -X PUT http://127.0.0.1:5000/contact/1*
 
 ### delete contact
-**/contact/<id>**  
-DELETE with <id> of the target contact  
+**/contact/++id++**  
+DELETE with ++id++ of the target contact  
 
 *curl -X DELETE http://127.0.0.1:5000/contact/1*
 
