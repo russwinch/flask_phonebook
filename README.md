@@ -34,6 +34,9 @@ DELETE with ++id++ of the target contact
 
 *curl -X DELETE http://127.0.0.1:5000/contact/1*
 
+### selecting environmental configuration
+export FLASK_CONFIG=development
+export FLASK_CONFIG=production
 ---
 
 ## approach
@@ -41,9 +44,12 @@ DELETE with ++id++ of the target contact
 2. broke code down into __init__ and models
 3. fixed bug with the add_contact function not returning json
 4. adapted script to purpose the fields needed and regenerated db
+5. implemented environmental config file and switching. based on [Build a CRUD Web App With Python and Flask - Part One](https://scotch.io/tutorials/build-a-crud-web-app-with-python-and-flask-part-one)
+6. set up manage.py and moved create_db functionality in here
 
 ## to do
 - authentication: http://polyglot.ninja/securing-rest-apis-basic-http-authentication-python-flask/
 - implement groups: groups table and link table to assign
 - aggregate id column to determine max(id), for testing
+- create test scripts
 - improve error handling
