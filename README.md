@@ -47,6 +47,7 @@ export FLASK_CONFIG=production
 5. implemented environmental config file and switching. based on [Build a CRUD Web App With Python and Flask - Part One](https://scotch.io/tutorials/build-a-crud-web-app-with-python-and-flask-part-one)
 6. set up manage.py and moved create_db functionality in here
 7. created a docker container: rwinch/phonebook:v1
+launch locally with *docker run -p 5000:5000 rwinch/phonebook:v1*
 
 ## to do
 - authentication: http://polyglot.ninja/securing-rest-apis-basic-http-authentication-python-flask/
