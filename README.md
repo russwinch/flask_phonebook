@@ -48,10 +48,14 @@ export FLASK_CONFIG=production
 6. set up manage.py and moved create_db functionality in here
 7. created a docker container: rwinch/phonebook:v1
 launch locally with *docker run -p 5000:5000 rwinch/phonebook:v1*
+8. docker-compose.yml file available. to run as a load balanced service:
+- docker swarm init
+- docker stack deploy -c docker-compose.yml phonebook
 
 ## to do
 - authentication: http://polyglot.ninja/securing-rest-apis-basic-http-authentication-python-flask/
 - implement groups: groups table and link table to assign
+- *persist the database so the docker implementation is useful*
 - aggregate id column to determine max(id), for testing
 - create test scripts
 - improve error handling
